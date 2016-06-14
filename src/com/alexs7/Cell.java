@@ -15,4 +15,7 @@ public class Cell {
         this.charValue = charValue;
     }
 
+    public char getCharValue() {
+        return charValue;
+    }
 }

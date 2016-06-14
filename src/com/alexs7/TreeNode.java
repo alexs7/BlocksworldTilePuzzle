@@ -12,7 +12,7 @@ public class TreeNode {
     private State data;
 
     public TreeNode(State data) {
-        this.data = data;
+        this.data = new State(data.getStateValues());
         this.children = new ArrayList<>();
     }
 
@@ -20,6 +20,10 @@ public class TreeNode {
     public void addChild(TreeNode child) {
         child.setParent(this);
         this.children.add(child);
+    }
+
+    public State getData() {
+        return data;
     }
 
     public List<TreeNode> getChildren(){
