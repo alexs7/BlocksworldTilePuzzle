@@ -1,7 +1,6 @@
 package com.alexs7;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by alex on 11/06/2016.
@@ -13,41 +12,83 @@ public class Tree {
     private Agent agent;
     private State startingState;
     private State endingState;
+    private ArrayList<int[]> visitedStates;
+    private int[] startingValues;
+    private int[] endingValues;
 
     public Tree() {
-        Cell[] startingValues = new Cell[]{ new Cell(0),    new Cell(1),    new Cell(2),    new Cell(3),
-                                            new Cell(4),    new Cell(5),    new Cell(6),    new Cell(7),
-                                            new Cell(8),    new Cell(9),    new Cell(10),   new Cell(11),
-                                            new Cell('A'),  new Cell('B'),  new Cell('C'),  new Cell('o')};
+        startingValues = new int[]{ 1, 1, 1, 1,
+                                    1, 1, 1, 1,
+                                    1, 1, 1, 1,
+                                    2, 3, 4, 0};
 
-        Cell[] endingValues = new Cell[]{   new Cell(0),    new Cell(1),    new Cell(2),    new Cell(3),
-                                            new Cell(4),    new Cell('A'),  new Cell(6),    new Cell(7),
-                                            new Cell(8),    new Cell('B'),  new Cell(10),   new Cell(11),
-                                            new Cell(12),   new Cell('C'),  new Cell(14),   new Cell('o')};
+        endingValues = new int[]{   1, 1, 1, 1,
+                                    1, 2, 1, 1,
+                                    1, 3, 1, 1,
+                                    1, 4, 1, 0};
 
         problemSize = (int) Math.sqrt(startingValues.length);
         agent = new Agent(problemSize);
         startingState = new State(startingValues);
         endingState = new State(endingValues);
-
+        visitedStates = new ArrayList<>();
 
         root = new TreeNode(startingState);
+        //applyDFSNonRecursive(root);
+        applyBFSNonRecursive(root);
 
-        List<TreeNode> nextStates = getNextStates(root);
-        generateStateSpaceRecursive(root, nextStates);
     }
 
-    public TreeNode generateStateSpaceRecursive(TreeNode node, List<TreeNode> childrenToAdd){
+    private void applyBFSNonRecursive(TreeNode root) {
+        Queue<TreeNode> queue  = new LinkedList<>();
+        queue.add(root);
 
-        for (TreeNode child : childrenToAdd){
-            node.addChild(child);
+        while(!queue.isEmpty()){
+            TreeNode node = queue.poll();
+            List<TreeNode> children = getNextStates(node);
+
+            for (TreeNode child : children){
+                if(Arrays.equals(child.getData().getStateValues(),endingValues)){
+                    System.out.println("Found!");
+                    break;
+                }
+                queue.add(child);
+            }
         }
+    }
 
-        for (TreeNode child : node.getChildren()){
-            generateStateSpaceRecursive(child, getNextStates(child));
+    private void applyDFSNonRecursive(TreeNode root) {
+        Stack<TreeNode> stack = new Stack();
+        stack.push(root);
+        visitedStates.add(root.getData().getStateValues());
+
+        while(!stack.empty()){
+            TreeNode node = stack.pop();
+            List<TreeNode> children = getNextStates(node);
+
+            for (TreeNode child : children){
+                if(Arrays.equals(child.getData().getStateValues(),endingValues)){
+                    System.out.println("Found!");
+                    break;
+                }
+                stack.push(child);
+            }
+
         }
+    }
 
-        return root;
+    private boolean goalStateReached(TreeNode node) {
+        return Arrays.equals(node.getData().getStateValues(),endingValues);
+    }
+
+    private boolean stateVisited(int[] newStateValue) {
+        for (int[] stateValue : visitedStates){
+
+            if(Arrays.equals(stateValue,newStateValue)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<TreeNode> getNextStates(TreeNode node) {
@@ -69,4 +110,26 @@ public class Tree {
 
         return nextStates;
     }
+
+//not use for now
+//public void generateStateSpaceRecursive(TreeNode node){
+//
+//    if(node == null){
+//        root = new TreeNode(startingState);
+//        visitedStates.add(root.getData().getStateValues());
+//        generateStateSpaceRecursive(root);
+//    }else {
+//        if (!goalStateReached(node)) {
+//            List<TreeNode> nextStatesNodes = getNextStates(node);
+//            for (TreeNode childNode : nextStatesNodes) {
+//                if (!stateVisited(childNode.getData().getStateValues())) {
+//                    visitedStates.add(childNode.getData().getStateValues());
+//                    node.addChild(childNode);
+//                    generateStateSpaceRecursive(childNode);
+//                }
+//            }
+//        }
+//    }
+//
+//}
 }

@@ -30,15 +30,14 @@ public class Agent {
 
     public boolean canMoveDown(TreeNode node) {
         int agentPosition = node.getData().getAgentPosition();
-        int foo = ((problemSize * problemSize) - problemSize);
         return agentPosition < ((problemSize * problemSize) - problemSize);
     }
 
     public TreeNode moveLeft(TreeNode node) {
         TreeNode newNode = new TreeNode(node.getData());
         int agentPosition = newNode.getData().getAgentPosition();
-        Cell agentCell  = newNode.getData().getStateValues()[agentPosition];
-        Cell leftCell  = newNode.getData().getStateValues()[agentPosition-1];
+        int agentCell  = newNode.getData().getStateValues()[agentPosition];
+        int leftCell  = newNode.getData().getStateValues()[agentPosition-1];
 
         newNode.getData().getStateValues()[agentPosition] = leftCell;
         newNode.getData().getStateValues()[agentPosition-1] = agentCell;
@@ -49,8 +48,8 @@ public class Agent {
     public TreeNode moveRight(TreeNode node) {
         TreeNode newNode = new TreeNode(node.getData());
         int agentPosition = newNode.getData().getAgentPosition();
-        Cell agentCell  = newNode.getData().getStateValues()[agentPosition];
-        Cell rightCell  = newNode.getData().getStateValues()[agentPosition+1];
+        int agentCell  = newNode.getData().getStateValues()[agentPosition];
+        int rightCell  = newNode.getData().getStateValues()[agentPosition+1];
 
         newNode.getData().getStateValues()[agentPosition] = rightCell;
         newNode.getData().getStateValues()[agentPosition+1] = agentCell;
@@ -61,8 +60,8 @@ public class Agent {
     public TreeNode moveUp(TreeNode node) {
         TreeNode newNode = new TreeNode(node.getData());
         int agentPosition = newNode.getData().getAgentPosition();
-        Cell agentCell  = newNode.getData().getStateValues()[agentPosition];
-        Cell upperCell  = newNode.getData().getStateValues()[agentPosition-problemSize];
+        int agentCell  = newNode.getData().getStateValues()[agentPosition];
+        int upperCell  = newNode.getData().getStateValues()[agentPosition-problemSize];
 
         newNode.getData().getStateValues()[agentPosition] = upperCell;
         newNode.getData().getStateValues()[agentPosition-problemSize] = agentCell;
@@ -73,8 +72,8 @@ public class Agent {
     public TreeNode moveDown(TreeNode node) {
         TreeNode newNode = new TreeNode(node.getData());
         int agentPosition = newNode.getData().getAgentPosition();
-        Cell agentCell  = newNode.getData().getStateValues()[agentPosition];
-        Cell upperCell  = newNode.getData().getStateValues()[agentPosition+problemSize];
+        int agentCell  = newNode.getData().getStateValues()[agentPosition];
+        int upperCell  = newNode.getData().getStateValues()[agentPosition+problemSize];
 
         newNode.getData().getStateValues()[agentPosition] = upperCell;
         newNode.getData().getStateValues()[agentPosition+problemSize] = agentCell;
