@@ -10,10 +10,12 @@ public class TreeNode {
     private TreeNode parent;
     private List<TreeNode> children;
     private State data;
+    private int depth;
 
     public TreeNode(State data) {
         this.data = new State(data.getStateValues());
         this.children = new ArrayList<>();
+        this.depth = 0;
     }
 
     //    new incoming node
@@ -32,5 +34,13 @@ public class TreeNode {
 
     public void setParent(TreeNode parent) {
         this.parent = parent;
+    }
+
+    public void setDepth(int value){
+        this.depth = value;
+    }
+
+    public int getDepth(){
+        return depth;
     }
 }

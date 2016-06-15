@@ -33,13 +33,39 @@ public class Tree {
         endingState = new State(endingValues);
         visitedStates = new ArrayList<>();
 
-        root = new TreeNode(startingState);
-        //applyDFSNonRecursive(root);
-        applyBFSNonRecursive(root);
 
+        //runDFSNonRecursive();
+        //runBFSNonRecursive();
+        runIterativeDeepeningDFS(1); // depth limit
     }
 
-    private void applyBFSNonRecursive(TreeNode root) {
+    private void runIterativeDeepeningDFS(int depthLimit){
+        root = new TreeNode(startingState);
+        Queue<TreeNode> queue  = new LinkedList<>();
+        queue.add(root);
+
+        while(!queue.isEmpty()){
+            TreeNode node = queue.poll();
+            List<TreeNode> children = getNextStates(node);
+
+            if(node.getDepth() > depthLimit){
+                System.out.println("Reached limit!");
+                break;
+            }
+
+            for (TreeNode child : children){
+                if(Arrays.equals(child.getData().getStateValues(),endingValues)){
+                    System.out.println("Found!");
+                    break;
+                }
+                child.setDepth(node.getDepth()+1);
+                queue.add(child);
+            }
+        }
+    }
+
+    private void runBFSNonRecursive() {
+        root = new TreeNode(startingState);
         Queue<TreeNode> queue  = new LinkedList<>();
         queue.add(root);
 
@@ -57,7 +83,8 @@ public class Tree {
         }
     }
 
-    private void applyDFSNonRecursive(TreeNode root) {
+    private void runDFSNonRecursive() {
+        root = new TreeNode(startingState);
         Stack<TreeNode> stack = new Stack();
         stack.push(root);
         visitedStates.add(root.getData().getStateValues());
