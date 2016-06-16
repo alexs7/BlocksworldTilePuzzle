@@ -48,7 +48,7 @@ public class Tree {
             TreeNode node = queue.poll();
             List<TreeNode> children = getNextStates(node);
 
-            if(node.getDepth() > depthLimit){
+            if(node.getDepth() == depthLimit){
                 System.out.println("Reached limit!");
                 break;
             }
