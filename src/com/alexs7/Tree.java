@@ -36,7 +36,39 @@ public class Tree {
 
         //runDFSNonRecursive();
         //runBFSNonRecursive();
-        runIterativeDeepeningDFS(1); // depth limit
+        //runIterativeDeepeningDFS(4); // depth limit
+        runAStarAlgorithm();
+    }
+
+    private void runAStarAlgorithm() {
+        root = new TreeNode(startingState);
+        Queue<TreeNode> queue  = new LinkedList<>();
+        queue.add(root);
+
+        while(!queue.isEmpty()){
+            TreeNode node = getNodeWithMinimumCostFunctionValue(queue);
+            List<TreeNode> children = getNextStates(node);
+
+            for (TreeNode child : children){
+                double cost = calculateCostFunction(child);
+                if(Arrays.equals(child.getData().getStateValues(),endingValues)){
+                    System.out.println("Found!");
+                    break;
+                }
+                queue.add(child);
+            }
+        }
+    }
+
+    private TreeNode getNodeWithMinimumCostFunctionValue(Queue<TreeNode> queue) {
+
+        if(queue.size() == 1){
+            return queue.poll();
+        }
+        for (TreeNode node : queue){
+
+        }
+        return null;
     }
 
     private void runIterativeDeepeningDFS(int depthLimit){
@@ -136,6 +168,10 @@ public class Tree {
         }
 
         return nextStates;
+    }
+
+    private double calculateCostFunction(TreeNode child) {
+        return 0.0;
     }
 
 //not use for now

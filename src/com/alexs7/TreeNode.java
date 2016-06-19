@@ -11,11 +11,13 @@ public class TreeNode {
     private List<TreeNode> children;
     private State data;
     private int depth;
+    private double costFunctionValue;
 
     public TreeNode(State data) {
         this.data = new State(data.getStateValues());
         this.children = new ArrayList<>();
         this.depth = 0;
+        this.costFunctionValue = 0.0;
     }
 
     //    new incoming node
@@ -42,5 +44,13 @@ public class TreeNode {
 
     public int getDepth(){
         return depth;
+    }
+
+    public double getCostFunctionValue() {
+        return costFunctionValue;
+    }
+
+    public void setCostFunctionValue(double costFunctionValue) {
+        this.costFunctionValue = costFunctionValue;
     }
 }
