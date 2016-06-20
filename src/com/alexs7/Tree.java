@@ -1,6 +1,8 @@
 package com.alexs7;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by alex on 11/06/2016.
@@ -37,39 +39,85 @@ public class Tree {
         //runDFSNonRecursive();
         //runBFSNonRecursive();
         //runIterativeDeepeningDFS(4); // depth limit
-        runAStarAlgorithm();
+        runBestFirstSearch(); // uses a heuristic function
     }
 
-    private void runAStarAlgorithm() {
+    private void runBestFirstSearch() {
         root = new TreeNode(startingState);
         Queue<TreeNode> queue  = new LinkedList<>();
         queue.add(root);
 
+        mainloop:
         while(!queue.isEmpty()){
-            TreeNode node = getNodeWithMinimumCostFunctionValue(queue);
+            TreeNode node = getNodeWithMinimumCostFunctionValueFromGoal(queue,endingState);
             List<TreeNode> children = getNextStates(node);
 
             for (TreeNode child : children){
-                double cost = calculateCostFunction(child);
+
                 if(Arrays.equals(child.getData().getStateValues(),endingValues)){
                     System.out.println("Found!");
-                    break;
+                    break mainloop;
                 }
+
+                double cost = calculateManhattanDistance(child,endingState);
+                child.setCostFunctionValue(cost);
+
                 queue.add(child);
             }
         }
     }
 
-    private TreeNode getNodeWithMinimumCostFunctionValue(Queue<TreeNode> queue) {
+    private TreeNode getNodeWithMinimumCostFunctionValueFromGoal(Queue<TreeNode> queue, State endingState) {
+
+        double minManhattanDistance = Double.MAX_VALUE;
+        TreeNode minNode = null;
 
         if(queue.size() == 1){
             return queue.poll();
         }
         for (TreeNode node : queue){
-
+            if(node.getCostFunctionValue() < minManhattanDistance){
+                minNode = node;
+                minManhattanDistance = node.getCostFunctionValue();
+            }
         }
-        return null;
+        return minNode;
     }
+
+    private double calculateManhattanDistance(TreeNode child, State endingState) {
+        int[] childStateValues = child.getData().getStateValues();
+        int[] endingStateValues = endingState.getStateValues();
+        int tempElement = 0;
+        int childElementIndex = 0;
+        int endingStateElementIndex = 0;
+        Point childElementPoint;
+        Point endingStateElementPoint;
+        double manhattanDistance = 0.0;
+
+        for (int i = 0; i < childStateValues.length; i++) {
+            if(childStateValues[i] != 1){
+                tempElement = childStateValues[i];
+                childElementIndex = i;
+                for (int j = 0; j < endingStateValues.length; j++) {
+                    if(endingStateValues[j] == tempElement){
+                        endingStateElementIndex = j;
+                    }
+                }
+                childElementPoint = new Point(childElementIndex%4,Math.round(childElementIndex/4));
+                endingStateElementPoint = new Point(endingStateElementIndex%4,Math.round(endingStateElementIndex/4));
+                manhattanDistance += Math.abs(childElementPoint.getX() - endingStateElementPoint.getX()) + Math.abs(childElementPoint.getY() - endingStateElementPoint.getY());
+
+//                System.out.println("checking element:" + tempElement + ", index in childNode: "+ childElementIndex + ", index in goalNode: "+ endingStateElementIndex);
+//                System.out.println("childElement coordinates: "+ childElementPoint.getX() + ", " + childElementPoint.getY());
+//                System.out.println("endingStateElement coordinates: "+ endingStateElementPoint.getX() + ", " + endingStateElementPoint.getY());
+//                System.out.println("manhattan distance "+manhattanDistance);
+//                System.out.println();
+            }
+        }
+
+        return manhattanDistance;
+    }
+
 
     private void runIterativeDeepeningDFS(int depthLimit){
         root = new TreeNode(startingState);
@@ -168,10 +216,6 @@ public class Tree {
         }
 
         return nextStates;
-    }
-
-    private double calculateCostFunction(TreeNode child) {
-        return 0.0;
     }
 
 //not use for now
