@@ -1,6 +1,8 @@
 package com.alexs7;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ar1v13 on 13/06/16.
@@ -79,5 +81,25 @@ public class Agent {
         newNode.getData().getStateValues()[agentPosition+problemSize] = agentCell;
 
         return newNode;
+    }
+
+    public List<TreeNode> getNextStates(TreeNode node) {
+
+        List<TreeNode> nextStates = new ArrayList<>();
+
+        if(canMoveLeft(node)){
+            nextStates.add(moveLeft(node));
+        }
+        if(canMoveRight(node)){
+            nextStates.add(moveRight(node));
+        }
+        if(canMoveUp(node)){
+            nextStates.add(moveUp(node));
+        }
+        if(canMoveDown(node)){
+            nextStates.add(moveDown(node));
+        }
+
+        return nextStates;
     }
 }

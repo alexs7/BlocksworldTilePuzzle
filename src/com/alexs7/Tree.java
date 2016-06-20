@@ -54,7 +54,7 @@ public class Tree {
 
             for (TreeNode child : children){
 
-                if(Arrays.equals(child.getData().getStateValues(),endingValues)){
+                if(isNodeEndGoal(child)){
                     System.out.println("Found!");
                     break mainloop;
                 }
@@ -119,31 +119,6 @@ public class Tree {
     }
 
 
-    private void runIterativeDeepeningDFS(int depthLimit){
-        root = new TreeNode(startingState);
-        Queue<TreeNode> queue  = new LinkedList<>();
-        queue.add(root);
-
-        while(!queue.isEmpty()){
-            TreeNode node = queue.poll();
-            List<TreeNode> children = getNextStates(node);
-
-            if(node.getDepth() == depthLimit){
-                System.out.println("Reached limit!");
-                break;
-            }
-
-            for (TreeNode child : children){
-                if(Arrays.equals(child.getData().getStateValues(),endingValues)){
-                    System.out.println("Found!");
-                    break;
-                }
-                child.setDepth(node.getDepth()+1);
-                queue.add(child);
-            }
-        }
-    }
-
     private void runBFSNonRecursive() {
         root = new TreeNode(startingState);
         Queue<TreeNode> queue  = new LinkedList<>();
@@ -184,41 +159,22 @@ public class Tree {
         }
     }
 
-    private boolean goalStateReached(TreeNode node) {
+    private boolean isNodeEndGoal(TreeNode node) {
         return Arrays.equals(node.getData().getStateValues(),endingValues);
     }
 
-    private boolean stateVisited(int[] newStateValue) {
-        for (int[] stateValue : visitedStates){
+    //this makes the problem a graph based problem
+//    private boolean stateVisited(int[] newStateValue) {
+//        for (int[] stateValue : visitedStates){
+//
+//            if(Arrays.equals(stateValue,newStateValue)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-            if(Arrays.equals(stateValue,newStateValue)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private List<TreeNode> getNextStates(TreeNode node) {
-
-        List<TreeNode> nextStates = new ArrayList<>();
-
-        if(agent.canMoveLeft(node)){
-            nextStates.add(agent.moveLeft(node));
-        }
-        if(agent.canMoveRight(node)){
-            nextStates.add(agent.moveRight(node));
-        }
-        if(agent.canMoveUp(node)){
-            nextStates.add(agent.moveUp(node));
-        }
-        if(agent.canMoveDown(node)){
-            nextStates.add(agent.moveDown(node));
-        }
-
-        return nextStates;
-    }
-
-//not use for now
+    //not use for now
 //public void generateStateSpaceRecursive(TreeNode node){
 //
 //    if(node == null){
@@ -226,7 +182,7 @@ public class Tree {
 //        visitedStates.add(root.getData().getStateValues());
 //        generateStateSpaceRecursive(root);
 //    }else {
-//        if (!goalStateReached(node)) {
+//        if (!isNodeEndGoal(node)) {
 //            List<TreeNode> nextStatesNodes = getNextStates(node);
 //            for (TreeNode childNode : nextStatesNodes) {
 //                if (!stateVisited(childNode.getData().getStateValues())) {
