@@ -50,7 +50,7 @@ public class Tree {
         mainloop:
         while(!queue.isEmpty()){
             TreeNode node = getNodeWithMinimumCostFunctionValueFromGoal(queue,endingState);
-            List<TreeNode> children = getNextStates(node);
+            List<TreeNode> children = agent.getNextStates(node);
 
             for (TreeNode child : children){
 
@@ -126,7 +126,7 @@ public class Tree {
 
         while(!queue.isEmpty()){
             TreeNode node = queue.poll();
-            List<TreeNode> children = getNextStates(node);
+            List<TreeNode> children = agent.getNextStates(node);
 
             for (TreeNode child : children){
                 if(Arrays.equals(child.getData().getStateValues(),endingValues)){
@@ -146,7 +146,7 @@ public class Tree {
 
         while(!stack.empty()){
             TreeNode node = stack.pop();
-            List<TreeNode> children = getNextStates(node);
+            List<TreeNode> children = agent.getNextStates(node);
 
             for (TreeNode child : children){
                 if(Arrays.equals(child.getData().getStateValues(),endingValues)){
